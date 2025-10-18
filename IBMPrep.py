@@ -6,9 +6,10 @@
 # Rotate an array of integers 'arr' to the right by 'k' steps.
 # Example: arr = [1,2,3,4,5], k=2 -> [4,5,1,2,3]
 def rotate_array(arr, k):
-    for i in range(len(arr)):
-        arr[i] = i + k
-    return arr
+    n = len(arr)
+    k = k % n  # handle k > n
+    return arr[-k:] + arr[:-k]
+#       last k elements  rest of arr
 
 arr = [1, 2, 3, 4, 5]
 k = 2
@@ -19,13 +20,56 @@ print(rotate_array(arr, k))
 # Return the length of the longest substring without repeating characters.
 # Example: "abcabcbb" -> 3 ("abc")
 def length_of_longest_substring(s):
-    pass  # implement your solution
+    start = 0
+    max_len = 0
+    seen_chars = {}
+    for end, char in enumerate(s):
+        if char in seen_chars and seen_chars[char] >= start:
+            start += 1
+        seen_chars[char] = end
+        current_len = end - start + 1
+        max_len = max(max_len, current_len)
+
+    return max_len
+
+s = "abcabcbb"
+print("---PROBLEM 2---")
+print(length_of_longest_substring(s))
 
 # Problem 3: Valid Anagram
 # Given two strings s and t, return True if t is an anagram of s.
+# Runtime is O(n) and space complexity is O(n) --> using two dictionaries
 def is_anagram(s, t):
-    pass  # implement your solution
+    if len(s) != len(t):
+        return False
+    
+    s_count = {}
+    t_count = {}
 
+    for i in s:
+        if i not in s_count:
+            s_count[i] = 1
+        else:
+            s_count[i] += 1
+
+    for i in t:
+        if i not in t_count:
+            t_count[i] = 1
+        else:
+            t_count[i] += 1
+    
+    return s_count == t_count
+
+s1 = "listen"
+t1 = "silent"
+s2 = "aabbcc"
+t2 = "abcabc"
+s3 = "Listen"
+t3 = "Silent"
+print("---PROBLEM 3---")
+print(is_anagram(s1, t1))
+print(is_anagram(s2, t2))
+print(is_anagram(s3, t3))
 
 # ================================
 # 2. Linked Lists
@@ -36,21 +80,84 @@ class ListNode:
         self.val = val
         self.next = next
 
+def create_linked_list(lst):
+    if not lst:  # empty list
+        return None
+    head = ListNode(lst[0])
+    curr = head
+    for val in lst[1:]:
+        curr.next = ListNode(val)
+        curr = curr.next
+    return head
+
+# Helper: print linked list
+def print_linked_list(head):
+    curr = head
+    res = []
+    while curr:
+        res.append(curr.val)
+        curr = curr.next
+    print(res)
+
 # Problem 4: Reverse a Linked List
 # Reverse a singly linked list and return the head.
 def reverse_linked_list(head):
-    pass  # implement your solution
+    curr = head
+    prev = None
+
+    while curr:
+        next = curr.next
+        curr.next = prev
+        prev = curr
+        curr = next
+
+    return prev
+
+head = create_linked_list([1, 2, 3, 4, 5])
+
+print("---PROBLEM 4---")
+print("Original list:")
+print_linked_list(head)
+
+reversed_head = reverse_linked_list(head)
+
+print("Reversed list:")
+print_linked_list(reversed_head)
 
 # Problem 5: Detect Cycle in a Linked List
 # Return True if there is a cycle in the linked list.
 def has_cycle(head):
-    pass  # implement your solution
+    visited = set()
+    slow = head
+    fast = head
+
+    curr = head
+    while curr:
+        if curr in visited:
+            return True
+        visited.add(curr)
+        curr = curr.next
+    
+    return False
+
+head = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5)))))
+node3 = head.next.next      # node with value 3
+node5 = head.next.next.next.next  # node with value 5
+node5.next = node3
+
+print("---PROBLEM 5---")
+print(has_cycle(head))
+head2 = ListNode(1, ListNode(2, ListNode(3)))
+print(has_cycle(head2))
+
+
 
 # Problem 6: Merge Two Sorted Lists
 # Merge two sorted linked lists and return the merged list.
 def merge_two_sorted_lists(l1, l2):
     pass  # implement your solution
 
+print("---PROBLEM 6---")
 
 # ================================
 # 3. Trees & Graphs
