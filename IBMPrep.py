@@ -150,15 +150,34 @@ print(has_cycle(head))
 head2 = ListNode(1, ListNode(2, ListNode(3)))
 print(has_cycle(head2))
 
-
-
 # Problem 6: Merge Two Sorted Lists
 # Merge two sorted linked lists and return the merged list.
 def merge_two_sorted_lists(l1, l2):
-    pass  # implement your solution
+    dummy = ListNode(0) # placeholder node
+    tail = dummy
+
+    while l1 and l2:
+        if l1.val < l2.val:
+            tail.next = l1
+            l1 = l1.next
+        else:
+            tail.next = l2
+            l2 = l2.next
+        tail = tail.next
+    
+    if l1:
+        tail.next = l1
+    if l2:
+        tail.next = l2
+
+    return dummy.next
 
 print("---PROBLEM 6---")
+l1 = create_linked_list([1, 3, 5])
+l2 = create_linked_list([2, 4, 6])
 
+merged1 = merge_two_sorted_lists(l1, l2)
+print_linked_list(merged1) 
 # ================================
 # 3. Trees & Graphs
 # ================================
@@ -172,13 +191,72 @@ class TreeNode:
 # Problem 7: Binary Tree Level Order Traversal
 # Return a list of lists of values for each tree level.
 def level_order_traversal(root):
-    pass  # implement your solution
+    if not root:
+        return []
+
+    queue = [root]
+    res = []
+
+    while queue:
+        level_nodes = []
+
+        for i in range(len(queue)):
+            node = queue.pop(0)
+            level_nodes.append(node.val)
+
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+            
+        res.append(level_nodes)
+
+    return res
+
+root = TreeNode(1)
+root.left = TreeNode(2)
+root.right = TreeNode(3)
+root.left.left = TreeNode(4)
+root.left.right = TreeNode(5)
+root.right.right = TreeNode(6)
+
+print("---PROBLEM 7---")
+print(level_order_traversal(root))  # Expected: [[1], [2, 3], [4, 5, 6]]
 
 # Problem 8: Shortest Path in Unweighted Graph
 # Implement BFS to find the shortest path from source to target in an unweighted graph.
 # graph is given as adjacency list, e.g., {0:[1,2], 1:[2], 2:[0,3], 3:[3]}
 def shortest_path(graph, start, end):
-    pass  # implement your solution
+    if start == end:
+        return [start]
+    
+    from collections import deque
+    queue = deque([(start, [start])])
+    visited = set([start])
+
+    while queue:
+        node, path = queue.popleft()
+
+        if node == end:
+            return path
+
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+
+    return None
+    
+graph = {
+    0: [1, 2],
+    1: [2],
+    2: [0, 3],
+    3: []
+}
+print("---PROBLEM 8---")
+print(shortest_path(graph, 0, 3))  # Output: [0, 2, 3]
+print(shortest_path(graph, 1, 3))  # Output: [1, 2, 3]
+print(shortest_path(graph, 3, 0))  # Output: None
 
 # Problem 9: Lowest Common Ancestor in BST
 # Given a BST root and two nodes p and q, return their lowest common ancestor.
