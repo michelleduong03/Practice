@@ -400,7 +400,7 @@ def prefix_query_count(names, queries):
     """
     For each query, return the number of names it is a proper prefix of.
 
-    for each querie, we can loop and check each word to see if each word in names has the prefix
+    for each query, we can loop and check each word to see if each word in names has the prefix
     inc the count if found
     essentially a double for loop
     """
@@ -421,3 +421,23 @@ queries = ["al", "bo", "c"]
 print("---PREFIX QUERY---")
 print(prefix_query_count(names, queries))  # Expected output: [3, 1, 0]
 
+def three_sum(nums): # medium
+    """
+    a + b + c = 0
+
+    triple for loop but thats not efficient
+    """
+    res = set()
+    nums.sort()
+    for i in range(len(nums)):
+        for j in range(i + 1, len(nums)):
+            for k in range (j + 1, len(nums)):
+                if nums[i] + nums[j] + nums[k] == 0:
+                    tmp = [nums[i], nums[j], nums[k]]
+                    res.add(tuple(tmp))
+    return [list(i) for i in res]
+
+# Example usage
+nums = [-1, 0, 1, 2, -1, -4]
+print("---3SUM---")
+print(three_sum(nums))  # Expected: [[-1, -1, 2], [-1, 0, 1]]
