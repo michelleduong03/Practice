@@ -361,3 +361,63 @@ def is_prime(n):
 # Return number of prime numbers less than n.
 def count_primes(n):
     pass  # implement your solution
+
+
+# IBM BANK
+def solution(s):
+    minflips = 0
+    for i in range(0, len(s), 2):
+        if s[i]==s[i+1]:
+            continue
+        else:
+            minflips+=1 
+
+    return minflips
+
+print("---MIN FLIP---")
+print(solution("10011001"))
+print(solution("101011"))
+
+def count_unique_duplicates(nums):
+    """
+    Return the number of unique duplicate numbers in the list.
+    """
+    seen = []
+    count = 0
+    for i in nums:
+        if i in seen:
+            count += 1
+        seen.append(i)
+    
+    return count
+
+# Example usage:
+nums = [1, 2, 3, 2, 3, 4, 5, 5]
+print("---UNIQUE DUPES---")
+print(count_unique_duplicates(nums))  # Expected output: 3
+
+def prefix_query_count(names, queries):
+    """
+    For each query, return the number of names it is a proper prefix of.
+
+    for each querie, we can loop and check each word to see if each word in names has the prefix
+    inc the count if found
+    essentially a double for loop
+    """
+    res = []
+    for query in queries:
+        count = 0
+        for name in names:
+            n = len(query)
+            if name[:n] == query:
+                count += 1
+        res.append(count)
+    
+    return res
+
+# Example usage:
+names = ["alice", "alex", "albert", "bob"]
+queries = ["al", "bo", "c"]
+print("---PREFIX QUERY---")
+print(prefix_query_count(names, queries))  # Expected output: [3, 1, 0]
+
