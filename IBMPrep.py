@@ -127,17 +127,26 @@ print_linked_list(reversed_head)
 # Problem 5: Detect Cycle in a Linked List
 # Return True if there is a cycle in the linked list.
 def has_cycle(head):
-    visited = set()
+    # visited = set()
+    # curr = head
+
+    # while curr:
+    #     if curr in visited:
+    #         return True
+    #     visited.add(curr)
+    #     curr = curr.next
+    
+    # return False
+
+# OR
     slow = head
     fast = head
 
-    curr = head
-    while curr:
-        if curr in visited:
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow == fast:
             return True
-        visited.add(curr)
-        curr = curr.next
-    
     return False
 
 head = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5)))))
@@ -273,16 +282,48 @@ def lowest_common_ancestor(root, p, q):
 def knapsack(weights, values, W):
     pass  # implement your solution
 
+weights = [2, 3, 4]
+values  = [3, 4, 5]
+W = 5
+
 # Problem 11: Longest Common Subsequence
 # Return the length of LCS of text1 and text2.
 def longest_common_subsequence(text1, text2):
-    pass  # implement your solution
+    n = len(text1)
+    m = len(text2)
+
+    # Create a table of size (n+1) x (m+1) filled with 0
+    dp = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if text1[i - 1] == text2[j - 1]:  # characters match
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:  # take the bigger LCS if we skip a character
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+    return dp[n][m]
+
+print("---PROBLEM 11---")
+print(longest_common_subsequence("abcde", "ace"))  # Output: 3
 
 # Problem 12: Coin Change
 # Given coins array and amount, return minimum number of coins to make amount.
 def coin_change(coins, amount):
-    pass  # implement your solution
+    # dp[a] = minimum coins needed to make amount a
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0  # 0 coins to make amount 0
 
+    for a in range(1, amount + 1):
+        for coin in coins:
+            if a - coin >= 0:
+                dp[a] = min(dp[a], dp[a - coin] + 1)
+
+    return dp[amount] if dp[amount] != float('inf') else -1
+
+print("---PROBLEM 12---")
+print(coin_change([1, 2, 5], 11))  # Output: 3 (5 + 5 + 1)
+print(coin_change([2], 3))         # Output: -1 (impossible)
 
 # ================================
 # 5. Hashing
