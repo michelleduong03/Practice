@@ -421,23 +421,87 @@ queries = ["al", "bo", "c"]
 print("---PREFIX QUERY---")
 print(prefix_query_count(names, queries))  # Expected output: [3, 1, 0]
 
-def three_sum(nums): # medium
-    """
-    a + b + c = 0
+# def three_sum(nums): # medium
+#     """
+#     a + b + c = 0
 
-    triple for loop but thats not efficient
-    """
-    res = set()
+#     triple for loop but thats not efficient
+#     """
+#     res = set()
+#     nums.sort()
+#     for i in range(len(nums)):
+#         for j in range(i + 1, len(nums)):
+#             for k in range (j + 1, len(nums)):
+#                 if nums[i] + nums[j] + nums[k] == 0:
+#                     tmp = [nums[i], nums[j], nums[k]]
+#                     res.add(tuple(tmp))
+#     return [list(i) for i in res]
+
+# OR
+def three_sum(nums):
+    res = []
     nums.sort()
+    
     for i in range(len(nums)):
-        for j in range(i + 1, len(nums)):
-            for k in range (j + 1, len(nums)):
-                if nums[i] + nums[j] + nums[k] == 0:
-                    tmp = [nums[i], nums[j], nums[k]]
-                    res.add(tuple(tmp))
-    return [list(i) for i in res]
+        if i > 0 and nums[i] == nums[i-1]:
+            continue
+        
+        left, right = i + 1, len(nums) - 1
+        
+        while left < right:
+            total = nums[i] + nums[left] + nums[right]
+            
+            if total == 0:
+                res.append([nums[i], nums[left], nums[right]])
+                left += 1
+                right -= 1
+                while left < right and nums[left] == nums[left - 1]:
+                    left += 1
+                while left < right and nums[right] == nums[right + 1]:
+                    right -= 1
+            elif total < 0:
+                left += 1
+            else:
+                right -= 1
+    
+    return res
 
 # Example usage
 nums = [-1, 0, 1, 2, -1, -4]
 print("---3SUM---")
 print(three_sum(nums))  # Expected: [[-1, -1, 2], [-1, 0, 1]]
+
+def rotate(matrix):
+    """
+    Rotate the n x n matrix 90 degrees clockwise in-place.
+    """
+    n = len(matrix)
+
+    for i in range(n):
+        for j in range(i, n):
+            matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+    for i in range(n):
+        matrix[i].reverse()
+    
+    return matrix
+
+# Example usage
+matrix1 = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9]
+]
+
+print("---ROTATE IMAGE---")
+rotate(matrix1)
+print(matrix1)
+
+matrix2 = [
+    [5, 1, 9, 11],
+    [2, 4, 8, 10],
+    [13, 3, 6, 7],
+    [15, 14, 12, 16]
+]
+rotate(matrix2)
+print(matrix2)
