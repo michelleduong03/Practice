@@ -332,19 +332,61 @@ print(coin_change([2], 3))         # Output: -1 (impossible)
 # Problem 13: Two Sum
 # Return indices of two numbers that add up to target.
 def two_sum(nums, target):
-    pass  # implement your solution
+    seen = {}
+
+    for i, num in enumerate(nums):
+        diff = target - num
+        if diff in seen:
+            return [seen[diff],i]
+        seen[num] = i
+    
+    return None
+
+print("---PROBLEM 13---")
+# Example usage
+nums = [2, 7, 11, 15]
+target = 9
+print(two_sum(nums, target))  # Output: [0, 1]
 
 # Problem 14: Group Anagrams
 # Group anagrams from a list of strings.
 def group_anagrams(strs):
-    pass  # implement your solution
+    groups = {}
+
+    for str in strs:
+        key = tuple(sorted(str))
+
+        if key not in groups:
+            groups[key] = []
+        groups[key].append(str)
+
+    return list(groups.values())
+
+print("---PROBLEM 14---")
+words = ["eat", "tea", "tan", "ate", "nat", "bat", "tae"]
+# Expected Output:
+# [
+#   ["eat", "tea", "ate"],
+#   ["tan", "nat"],
+#   ["bat"]
+# ]
+print(group_anagrams(words))
 
 # Problem 15: Find All Duplicates in an Array
 # Return a list of all duplicates in nums.
 def find_duplicates(nums):
-    pass  # implement your solution
+    seen = {}
+    res = []
+    for i in nums:
+        if i in seen:
+            res.append(i)
+        else:
+            seen[i] = 1
+    return res
 
-
+nums1 = [4, 3, 2, 7, 8, 2, 3, 1] # 2, 3
+print("---PROBLEM 15---")
+print(find_duplicates(nums1))
 # ================================
 # 6. Mathematical Problems
 # ================================
@@ -519,3 +561,287 @@ print(gray_code(1))  # [0, 1]
 print(gray_code(2))  # [0, 1, 3, 2]
 print(gray_code(3))  # [0, 1, 3, 2, 6, 7, 5, 4]
 
+# EX Problems hackkerrank
+from typing import List # for type hints, don't need but good for understanding data types
+
+"""
+
+Question 1: Subarray Sums at Most K
+
+Description:
+Given an array of positive integers nums and an integer k, 
+return the number of (continuous) subarrays whose sum is at most k.
+
+
+Example Usage:
+Input: nums = [1,2,3], k = 4 → Output: 4
+    Explanation: the subarrays with sum ≤ 4 are [1], [2], [1,2], [3].
+
+Input: nums = [2,2,2], k = 2 → Output: 3
+    Explanation: [2], [2], [2] each alone.
+
+
+Notes / hints:
+- All numbers are positive.
+- You need to count all continuous subarrays (not just distinct sums).
+- Think of using a sliding window/two-pointer approach to avoid O(n²) brute force.
+
+"""
+def count_subarrays_at_most_k(nums: List[int], k: int) -> int:
+    start = 0
+    curr_sum = 0
+    count = 0
+
+    for end in range(len(nums)):
+        curr_sum += nums[end]
+
+        while curr_sum > k:
+            curr_sum -= nums[start]
+            start += 1
+
+        count += end - start + 1
+
+    return count
+
+# nums = [1,2,3]
+# k = 4 
+nums = [2,2,2]
+k = 2
+print("HC-SUBARRAYS")
+print(count_subarrays_at_most_k(nums, k))
+
+"""
+
+Question 2: Minimum Flips to Make Binary String Alternating
+
+Description:
+Given a binary string s (consisting only of characters '0' and '1'), 
+return the minimum number of flips needed so that the string becomes 
+alternating, i.e., no two adjacent characters are the same. The target 
+string can be either starting with '0' ("010101…") or starting with 
+'1' ("101010…"); you should choose whichever requires fewer flips.
+
+
+Example Usage:
+Input: s = "0100" → Output: 1
+    Explanation: flip the last 0 to 1, giving "0101".
+
+Input: s = "1110" → Output: 2   
+    Explanation: possible alternating strings of same length are "1010" or "0101".
+        To reach "1010": flips at positions 0 and 2 → 2 flips.
+        To reach "0101": flips at positions 1 and 3 → 2 flips. So result is 2.
+
+        
+Notes / hints:
+- You can simulate two target patterns and count mismatches.
+- Time complexity should be O(n).
+- Space complexity should be O(1) extra (not counting input).
+
+"""
+def min_flips_alternating(s: str) -> int:
+    flips_start_0 = 0
+    flips_start_1 = 0
+    for i, char in enumerate(s):
+        expected0 = '0' if i % 2 == 0 else '1'
+        expected1 = '1' if i % 2 == 0 else '0'
+        if char != expected0:
+            flips_start_0 += 1
+        if char != expected1:
+            flips_start_1 += 1
+    return min(flips_start_0, flips_start_1)
+
+s = "1110" 
+print("HC-MINFLIPS") 
+print(min_flips_alternating(s))
+
+"""
+Question 3: Number of Unique Duplicate Values in an Array
+
+Description:
+Given a list of numbers, return the number of unique values that appear more than once in the list.
+For example: if the list is [1,2,2,3,3,3,4], the unique values that are duplicates are 2 and 3 → so result = 2.
+
+Example Usage:
+Input: nums = [4,3,2,7,8,2,3,1] → Output: 2
+    Explanation: The numbers 2 and 3 both appear more than once.
+
+Input: nums = [1,1,2] → Output: 1
+    Explanation: Only the number 1 appears more than once.
+
+Notes / hints:
+- Use a dictionary or hash map to track counts of each number.
+- Then count how many numbers have count > 1.
+- Time complexity should be O(n) on average.
+- Space complexity is O(n) for the map.
+
+"""
+def count_unique_duplicates(nums): 
+    seen = {}
+    for num in nums:
+        if num in seen:
+            seen[num] += 1
+        else:
+            seen[num] = 1
+
+    count = 0
+    for val in seen.values():
+        if val > 1:
+            count += 1
+    return count
+
+# nums = [4,3,2,7,8,2,3,1]
+# nums = [1,1,2]
+nums = [1, 1, 2, 2, 2]
+print("HC-UNIQUE")
+print(count_unique_duplicates(nums))
+
+
+"""
+Question 4: Prefix Queries on Names List
+
+Description:
+Given a list of names (strings) and a list of queries (strings), 
+return a list of integers where each integer corresponds to how many names 
+the query is a proper prefix of.
+"Proper prefix" here means the query appears at the beginning of the name.
+
+Example Usage:
+Input:
+    names = ["alice", "alex", "albert", "bob"]
+    queries = ["al", "bo", "c"]
+Output: [3, 1, 0]
+    Explanation:
+      - "al" is prefix to "alice", "alex", "albert" → count = 3
+      - "bo" is prefix to "bob" → count = 1
+      - "c" is prefix to none → count = 0
+
+Notes / hints:
+- Loop through queries and for each loop through names (nested loop).
+- Or optimize using a prefix-map/trie if lists are very large.
+- Time complexity for simple nested loops: O(Q * N * L) 
+  where Q=num queries, N=num names, L=average name length.
+- Space complexity: O(Q + N) (for result + names list).
+"""
+def prefix_query_count(names, queries):
+    res = []
+    for query in queries:
+        count = 0
+        for name in names:
+            n = len(query)
+            # gives first n letters in the name
+            if name[:n] == query:
+                count += 1
+        res.append(count)
+    return res
+
+names = ["alice", "alex", "albert", "bob"]
+queries = ["al", "bo", "c"]
+print("HC-QUERIES")
+print(prefix_query_count(names, queries))
+
+# DP CRASH COURSE
+def fib_dp(n): # bottom-up Runtime: O(n), Space: O(n)
+    if n <= 1:
+        return n
+    
+    dp = [0] * (n+1)  # dp[i] will store fib(i)
+    dp[0] = 0
+    dp[1] = 1
+    
+    for i in range(2, n+1):
+        dp[i] = dp[i-1] + dp[i-2]
+    
+    return dp[n]
+
+print("FIB-DB")
+print(fib_dp(5))  # Output: 5
+print(fib_dp(10)) # Output: 55
+
+
+def climb_stairs(n):
+    if n <= 1:
+        return 1
+    
+    dp = [0] * (n + 1)
+    dp[0] = 1
+    dp[1] = 1
+    
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    
+    return dp[n]
+
+print("CLIMB STAIRS - DP")
+print(climb_stairs(3))  # Output: 3
+print(climb_stairs(5))  # Output: 8
+
+def climb_stairs_optimized(n):
+    if n <= 1:
+        return 1
+    
+    a, b = 1, 1  # dp[0], dp[1]
+    
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    
+    return b
+
+print(climb_stairs_optimized(5))  # Output: 8
+
+
+"""
+Question 1: Maximum Product of Two Numbers in an Array
+
+Description:
+Given a list of positive integers nums, return the maximum product you can 
+obtain by multiplying any two distinct numbers in the list.
+
+Example Usage:
+Input: nums = [3, 4, 5, 2] → Output: 20
+    Explanation: 5 * 4 = 20
+
+Input: nums = [1, 10, 2, 6] → Output: 60
+    Explanation: 10 * 6 = 60
+
+Notes / hints:
+- You can sort the array and multiply the two largest numbers.
+- Time complexity should ideally be O(n) if you scan for the two largest numbers.
+"""
+def max_product(nums):
+    max1, max2 = 0, 0
+    for num in nums:
+        if num > max1:
+            max2 = max1
+            max1 = num 
+        elif num > max2:
+            max2 = num
+    
+    return max1 * max2
+
+
+nums = [1, 10, 2, 6]
+print("MAX PROD")
+print(max_product(nums))
+
+"""
+Question 2: Count Substrings with Exactly K Distinct Characters
+
+Description:
+Given a string s and an integer k, return the number of substrings 
+that contain exactly k distinct characters.
+
+Example Usage:
+Input: s = "pqpqs", k = 2 → Output: 7
+    Explanation: Substrings with exactly 2 distinct chars:
+    ["pq","pqp","qp","qpq","pq","qs","pqs"]
+
+Input: s = "aabab", k = 3 → Output: 0
+    Explanation: No substring contains exactly 3 distinct characters.
+
+Notes / hints:
+- Consider using a sliding window + hashmap to track character counts.
+- Time complexity should be O(n) on average.
+"""
+def count_substrings_k_distinct(s, k):
+    # Your code here
+    pass
