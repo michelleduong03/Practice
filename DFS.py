@@ -2,17 +2,28 @@
 # Count connected components in an undirected graph
 
 def count_components(n, edges):
-    # TODO: build adjacency list
+    # Step 1: build adjacency list
+    graph = {i: [] for i in range(n)}
+    for a, b in edges:
+        graph[a].append(b)
+        graph[b].append(a)
 
     visited = set()
 
+    # Step 2: DFS
     def dfs(node):
-        # TODO: implement DFS
-        pass
+        visited.add(node)
+        for nei in graph[node]:
+            if nei not in visited:
+                dfs(nei)
 
+    # Step 3: count components
     components = 0
+    for node in range(n):
+        if node not in visited:
+            dfs(node)
+            components += 1
 
-    # TODO: loop through nodes and count components
     return components
 
 
