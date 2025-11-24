@@ -42,14 +42,36 @@ def num_islands(grid):
 
     rows = len(grid)
     cols = len(grid[0])
+    visited = set()
 
     def dfs(r, c):
-        # TODO: stop if out of bounds or water or visited
-        pass
+        # stop if out of bounds
+        if r < 0 or r >= rows or c < 0 or c >= cols:
+            return
+
+        # stop if water or visited
+        if grid[r][c] == "0" or (r, c) in visited:
+            return
+
+        # mark as visited
+        visited.add((r, c))
+
+        # explore 4 directions
+        dfs(r+1, c)  # down
+        dfs(r-1, c)  # up
+        dfs(r, c+1)  # right
+        dfs(r, c-1)  # left
 
     islands = 0
 
-    # TODO: loop through grid and call DFS
+    # scan entire grid
+    for r in range(rows):
+        for c in range(cols):
+            # if we find new land, run DFS
+            if grid[r][c] == "1" and (r, c) not in visited:
+                dfs(r, c)
+                islands += 1
+
     return islands
 
 
