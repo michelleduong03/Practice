@@ -94,8 +94,29 @@ def path_exists(maze, start, end):
     visited = set()
 
     def dfs(r, c):
-        # TODO: base cases + DFS movement
-        pass
+        # 1) Out of bounds
+        if r < 0 or r >= rows or c < 0 or c >= cols:
+            return False
+
+        # 2) Hit wall or visited
+        if maze[r][c] == 1 or (r, c) in visited:
+            return False
+
+        # 3) If this IS the end → success
+        if (r, c) == end:
+            return True
+
+        # mark visited
+        visited.add((r, c))
+
+        # explore in 4 directions
+        if dfs(r+1, c): return True   # down
+        if dfs(r-1, c): return True   # up
+        if dfs(r, c+1): return True   # right
+        if dfs(r, c-1): return True   # left
+
+        # no path found here
+        return False
 
     return dfs(start[0], start[1])
 
