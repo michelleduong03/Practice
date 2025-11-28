@@ -67,3 +67,8 @@ maze = [
 ]
 
 print(shortest_path_maze(maze, (0,0), (2,2)))
+
+
+def group_user_events(logs: list[str]) -> dict:
+    pass
+
