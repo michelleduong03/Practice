@@ -38,3 +38,43 @@ logs = [
 ]
 
 print(group_user_events(logs))
+
+
+
+def simulate_patients(arrivals: list[tuple[int,int,int]], t: int) -> dict:
+    # Sort arrivals by arrival_time (just in case)
+    arrivals.sort(key=lambda x: x[0])
+
+    time = 0                     # current time
+    i = 0                        # index for arrivals
+    n = len(arrivals)
+    waiting = []                # waiting patients: (severity, arrival_time, id)
+    result = {}                 # patient_id -> start_time
+
+    while i < n or waiting:
+        # Add all patients who arrive at this time
+        while i < n and arrivals[i][0] <= time:
+            arr_time, pid, sev = arrivals[i]
+            waiting.append((sev, arr_time, pid))
+            i += 1
+
+        if waiting:
+            # Choose highest severity, tie → earliest arrival
+            waiting.sort(key=lambda x: (-x[0], x[1]))
+            sev, arr_time, pid = waiting.pop(0)
+
+            # Start treatment now
+            result[pid] = time
+
+            # Doctor busy for t minutes
+            time += t
+        else:
+            # If no one waiting, jump directly to next arrival time
+            time = arrivals[i][0]
+
+    return result
+
+arrivals = [(0,1,5), (1,2,2), (2,3,5)]
+t = 4
+
+print(simulate_patients(arrivals, t))
