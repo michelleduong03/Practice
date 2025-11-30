@@ -164,3 +164,45 @@ endWord = "cog"
 wordList = ["hot","dot","dog","lot","log","cog"]
 
 print("Shortest transformation:", word_ladder(beginWord, endWord, wordList))
+
+
+
+from collections import deque
+
+def knight_shortest_path(n, start, end):
+    # start and end are (row, col)
+    if start == end:
+        return 0
+
+    moves = [
+        (2, 1), (2, -1), (-2, 1), (-2, -1),
+        (1, 2), (1, -2), (-1, 2), (-1, -2)
+    ]
+
+    queue = deque([(start[0], start[1], 0)])  # (r, c, steps)
+    visited = set([start])
+
+    while queue:
+        r, c, steps = queue.popleft()
+
+        for dr, dc in moves:
+            nr, nc = r + dr, c + dc
+
+            if (nr, nc) == end:
+                return steps + 1
+
+            # check bounds
+            if 0 <= nr < n and 0 <= nc < n:
+                if (nr, nc) not in visited:
+                    visited.add((nr, nc))
+                    queue.append((nr, nc, steps + 1))
+
+    return -1  # no path (rare)
+
+
+# ------------ TEST ------------
+n = 8
+start = (0, 0)
+end = (7, 7)
+
+print("Knight shortest path:", knight_shortest_path(n, start, end))
