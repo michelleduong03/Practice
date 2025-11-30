@@ -134,3 +134,53 @@ end = (2,2)
 print("Path exists:", path_exists(maze, start, end))
 
 
+
+def count_closed_islands(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+
+    visited = set()
+
+    def dfs(r, c):
+        # If we leave the grid, NOT closed
+        if r < 0 or r >= rows or c < 0 or c >= cols:
+            return False
+
+        # If it's water or visited, treat as closed up to this point
+        if grid[r][c] == 1 or (r, c) in visited:
+            return True
+
+        visited.add((r, c))
+
+        # DFS in 4 directions
+        up    = dfs(r-1, c)
+        down  = dfs(r+1, c)
+        left  = dfs(r, c-1)
+        right = dfs(r, c+1)
+
+        # A land region is closed only if ALL 4 sides are closed
+        return up and down and left and right
+
+    closed_islands = 0
+
+    # Scan grid
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 0 and (r, c) not in visited:
+                if dfs(r, c):       # if DFS returns True → it's closed
+                    closed_islands += 1
+
+    return closed_islands
+
+
+# ------------ TEST ------------
+grid = [
+    [1,1,1,1,1,1],
+    [1,0,0,1,0,1],
+    [1,0,1,1,0,1],
+    [1,1,1,0,0,1],
+    [1,0,0,0,1,1],
+    [1,1,1,1,1,1],
+]
+
+print("Closed islands:", count_closed_islands(grid))
