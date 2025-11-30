@@ -125,3 +125,42 @@ grid = [
 ]
 
 print("Minutes for all to rot:", rotting_oranges(grid))
+
+
+
+from collections import deque
+
+def word_ladder(beginWord, endWord, wordList):
+    wordSet = set(wordList)
+    if endWord not in wordSet:
+        return 0
+
+    queue = deque([(beginWord, 1)])  # (word, steps)
+    visited = set([beginWord])
+
+    while queue:
+        word, steps = queue.popleft()
+
+        # reached the end
+        if word == endWord:
+            return steps
+
+        # try changing every character
+        for i in range(len(word)):
+            for ch in "abcdefghijklmnopqrstuvwxyz":
+                newWord = word[:i] + ch + word[i+1:]
+
+                # must be a valid unused word
+                if newWord in wordSet and newWord not in visited:
+                    visited.add(newWord)
+                    queue.append((newWord, steps + 1))
+
+    return 0  # no path
+
+
+# ------------ TEST ------------
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+print("Shortest transformation:", word_ladder(beginWord, endWord, wordList))
