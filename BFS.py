@@ -72,3 +72,56 @@ print(shortest_path_maze(maze, (0,0), (2,2)))
 def group_user_events(logs: list[str]) -> dict:
     pass
 
+
+
+from collections import deque
+
+def rotting_oranges(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+
+    queue = deque()
+    fresh = 0
+
+    # Step 1: find all rotten oranges and count fresh ones
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 2:
+                queue.append((r, c, 0))     # rotten start points
+            elif grid[r][c] == 1:
+                fresh += 1
+
+    # If no fresh oranges, time = 0
+    if fresh == 0:
+        return 0
+
+    minutes = 0
+
+    # BFS to spread rot
+    while queue:
+        r, c, time = queue.popleft()
+        minutes = max(minutes, time)
+
+        # check 4 directions
+        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+            nr, nc = r + dr, c + dc
+
+            # rot the fresh orange
+            if 0 <= nr < rows and 0 <= nc < cols:
+                if grid[nr][nc] == 1:
+                    grid[nr][nc] = 2     # now rotten
+                    fresh -= 1
+                    queue.append((nr, nc, time + 1))
+
+    # if any fresh remains, impossible
+    return minutes if fresh == 0 else -1
+
+
+# ------------ TEST ------------
+grid = [
+    [2,1,1],
+    [1,1,0],
+    [0,1,1]
+]
+
+print("Minutes for all to rot:", rotting_oranges(grid))
