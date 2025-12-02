@@ -184,3 +184,27 @@ grid = [
 ]
 
 print("Closed islands:", count_closed_islands(grid))
+
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+def sumNumbers(root):
+    def dfs(node, curr):
+        # TODO: DFS accumulate value
+        pass
+    
+    return dfs(root, 0)
+
+
+# Test
+root = TreeNode(1,
+    TreeNode(2, TreeNode(4), TreeNode(5)),
+    TreeNode(3)
+)
+
+print(sumNumbers(root))
