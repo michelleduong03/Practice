@@ -229,8 +229,16 @@ def letterCombinations(digits):
     res = []
 
     def dfs(i, path):
-        # TODO: implement DFS to build strings
-        pass
+        if i == len(digits):
+            res.append(path)
+            return
+
+        # Get letters for current digit
+        letters = phone[digits[i]]
+
+        # Try each letter
+        for ch in letters:
+            dfs(i + 1, path + ch)  # move to next digit
 
     dfs(0, "")
     return res
