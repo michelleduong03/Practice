@@ -3,11 +3,23 @@
 from typing import List
 
 def two_sum(nums: List[int], target: int) -> List[int]:
-    # TODO: implement your solution
-    pass
+    # for i in range(len((nums))):
+    #     for j in range (i + 1, len(nums)):
+    #         if nums[i] + nums[j] == target:
+    #             return [i, j]
+    # return []
+    seen = {}
+
+    for i, val in enumerate(nums):
+        difference = target - val
+        if difference in seen:
+            return [seen[difference], i]
+        seen[val] = i
+    return []
 
 # Example test
-nums = [2, 7, 11, 15]
+# nums = [2, 7, 11, 15]
+nums = [1, 5, 8, 9]
 target = 9
 print(two_sum(nums, target))  # Output: [0, 1]
 
