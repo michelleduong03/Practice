@@ -27,8 +27,19 @@ print(two_sum(nums, target))  # Output: [0, 1]
 # longest_substring.py
 
 def length_of_longest_substring(s: str) -> int:
-    # TODO: implement your solution
-    pass
+    seen = set() # O(n)
+    start = 0
+    max_len = 0
+
+    for end in range(len(s)):
+        while s[end] in seen:
+            seen.remove(s[start])
+            start += 1
+        seen.add(s[end])
+        max_len = max(max_len, end - start + 1)
+    
+    return max_len
+
 
 # Example test
 s = "abcabcbb"
