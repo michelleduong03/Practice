@@ -72,3 +72,46 @@ def merge_intervals(intervals: List[List[int]]) -> List[List[int]]:
 # Example test
 intervals = [[1,3],[2,6],[8,10],[15,18]]
 print(merge_intervals(intervals))  # Output: [[1,6],[8,10],[15,18]]
+
+
+from typing import List
+
+def consolidate_transactions(transactions: List[List[int]]) -> List[List[int]]:
+    # Sort by customerId, then timestamp
+    transactions.sort()   # natural sort works: [customerId, amount, timestamp]
+    
+    merged = []
+    curr_id, curr_amount, curr_time = transactions[0]
+    
+    for i in range(1, len(transactions)):
+        t_id, t_amount, t_time = transactions[i]
+        
+        # If same customer AND within 60 seconds → merge
+        if t_id == curr_id and t_time - curr_time <= 60:
+            curr_amount += t_amount   # accumulate amount
+            # timestamp stays the earliest one
+        else:
+            merged.append([curr_id, curr_amount, curr_time])
+            curr_id, curr_amount, curr_time = t_id, t_amount, t_time
+    
+    # append last group
+    merged.append([curr_id, curr_amount, curr_time])
+    
+    return merged
+
+# Test
+transactions = [
+    [1, 20, 100],
+    [1, 15, 120],
+    [2, 30, 200],
+    [1, 40, 160],
+    [2, 10, 250]
+]
+
+print(consolidate_transactions(transactions))
+# Expected:
+# [
+#     [1, 35, 100],
+#     [1, 40, 160],
+#     [2, 40, 200]
+# ]
