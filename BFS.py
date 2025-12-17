@@ -206,3 +206,54 @@ start = (0, 0)
 end = (7, 7)
 
 print("Knight shortest path:", knight_shortest_path(n, start, end))
+
+
+
+from collections import deque
+
+def countReachable(grid):
+    if not grid or not grid[0]:
+        return 0
+
+    # if starting cell is blocked
+    if grid[0][0] == 1:
+        return 0
+
+    rows = len(grid)
+    cols = len(grid[0])
+
+    queue = deque()
+    visited = set()
+
+    # start from (0, 0)
+    queue.append((0, 0))
+    visited.add((0, 0))
+
+    count = 0
+
+    # possible directions: down, up, right, left
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+    while queue:
+        r, c = queue.popleft()
+        count += 1
+
+        for dr, dc in directions:
+            nr = r + dr
+            nc = c + dc
+
+            # check bounds, not blocked, not visited
+            if 0 <= nr < rows and 0 <= nc < cols:
+                if grid[nr][nc] == 0 and (nr, nc) not in visited:
+                    visited.add((nr, nc))
+                    queue.append((nr, nc))
+
+    return count
+
+grid = [
+    [0, 1, 0],
+    [0, 0, 1],
+    [1, 0, 0]
+]
+
+print(countReachable(grid))
