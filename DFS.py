@@ -262,3 +262,11 @@ def maxDepth(root):
 
     return 1 + max(left_depth, right_depth)
 
+
+
+def sumTree(root):
+    if root is None:
+        return 0
+
+    return root.val + sumTree(root.left) + sumTree(root.right)
+
