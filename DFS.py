@@ -294,3 +294,15 @@ def countLeaves(root):
     return countLeaves(root.left) + countLeaves(root.right)
 
 print(countLeaves(root))
+
+
+
+def findMax(root):
+    if root is None:
+        return float('-inf') 
+
+    left_max = findMax(root.left)
+    right_max = findMax(root.right)
+
+    return max(root.val, left_max, right_max)
+
