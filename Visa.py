@@ -5,11 +5,35 @@
 
 nums = [1, 4, 7, 2, 5]
 
-def ans():
+def count_pairs(nums):
+    count = 0
+
+    for i in range(len(nums) - 1):
+        if nums[i] % 2 != nums[i+1] % 2:
+            count += 1
+
+    return count
+
+nums = [2,2,3,3,3,4]
+def freq(nums):
+    seen = {}
+    max = 0
     res = 0
     for num in nums:
-        pass
+        if num not in seen:
+            seen[num] = 1
+        else:
+            seen[num] += 1
+    for k,v in enumerate(seen):
+        print(k)
+        print(v)
+        if v > max:
+            max = v
+            res = k
 
+    return res
+
+print(freq(nums))
 
 # PYTHON PATTERNS
 
