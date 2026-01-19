@@ -11,21 +11,28 @@ def solve(operations):
     user = {}
 
     for op in operations:
-        n = len(op)
-        if op[1] not in user:
-            user[op[1]] = 0
+
         if op[0] == "CREATE":
-            user[op[1]] = 0
+            name = op[1]
+            user[name] = 0
+
         elif op[0] == "DEPOSIT":
-           amount = int(op[2])
-           user[op[1]] += amount
+            name = op[1]
+            amount = int(op[2])
+            user[name] += amount
+
         elif op[0] == "TRANSFER":
             sender = op[1]
             receiver = op[2]
             amount = int(op[3])
-            if user[sender] >= amount:
-                user[sender] -= amount
+
+            if sender in user and receiver in user:
+                if user[sender] >= amount:
+                    user[sender] -= amount
+                    user[receiver] += amount
+
     return user
+
 
 print(solve(operations))
 
@@ -152,3 +159,27 @@ k = 3
 print(prefix(nums, k))
 
 
+heights = [2,1,5,6,2,3]
+
+def largestRectangle(heights):
+    stack = [] 
+    max_area = 0
+
+    for i, h in enumerate(heights):
+        start = i
+
+        # if current bar is shorter → resolve previous
+        while stack and stack[-1][1] > h: # Current bar is shorter → previous tall bar can’t extend anymore. Time to compute its final rectangle.
+            index, height = stack.pop()
+            width = i - index
+            max_area = max(max_area, height * width)
+            start = index
+
+        stack.append((start, h))
+
+    # clean up remaining
+    for index, height in stack:
+        width = len(heights) - index
+        max_area = max(max_area, height * width)
+
+    return max_area

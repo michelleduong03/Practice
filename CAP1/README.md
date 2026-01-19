@@ -67,7 +67,7 @@ def merge(intervals):
     res = [intervals[0]]
 
     for s,e in intervals[1:]:
-        if s <= res[-1][1]:
+        if s <= res[-1][1]: # end of last merged interval
             res[-1][1] = max(res[-1][1], e)
         else:
             res.append([s,e])
