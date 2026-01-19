@@ -114,6 +114,9 @@ print(solution(["a","b","a"]))   # {"a":2,"b":1}
 
 intervals = [[1,2], [3,6], [4, 8], [8, 12]]
 def merge(intervals):
+    if not intervals:
+        return []
+
     intervals.sort()
     res = [intervals[0]]
 
@@ -125,3 +128,27 @@ def merge(intervals):
     return res
 
 print(merge(intervals))
+
+
+
+def prefix(nums, k):
+    curr = 0
+    count = {0: 1}
+    ans = 0
+
+    for n in nums:
+        curr += n
+
+        need = curr - k
+        ans += count.get(need, 0)
+
+        count[curr] = count.get(curr, 0) + 1
+
+    return ans
+
+
+nums = [1,2,1,2,1]
+k = 3
+print(prefix(nums, k))
+
+
