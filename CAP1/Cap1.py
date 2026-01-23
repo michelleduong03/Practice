@@ -183,3 +183,154 @@ def largestRectangle(heights):
         max_area = max(max_area, height * width)
 
     return max_area
+
+
+
+def solution(logs):
+    user = {}
+
+    for log in logs:
+        op, name, amount = log.split()
+        amount = int(amount)
+
+        if name not in user:
+            user[name] = 0
+
+        if op == "ADD":
+            user[name] += amount
+
+        elif op == "PAY":
+            if user[name] >= amount:
+                user[name] -= amount
+
+    return user
+
+
+def consecutive_id(ids):
+    if not ids:
+        return []
+
+    ids.sort()
+    res = [[ids[0], ids[0]]]
+
+    for num in ids[1:]:
+        if num == res[-1][1] + 1:
+            # extend the current range
+            res[-1][1] = num
+        else:
+            # start new range
+            res.append([num, num])
+
+    return res
+
+nums = [1,2,3,7,8,10,11,12]
+print(consecutive_id(nums))
+# Output: [[1,3],[7,8],[10,12]]
+
+def balance(logs):
+    user = {}
+
+    for log in logs:
+        op, name, amount = log
+        amount = int(amount)
+
+        if name not in user:
+            user[name] = 0
+        
+        if op == "ADD":
+            user[name] += amount
+        elif op == "PAY":
+            if user[name] >= amount:
+                user[name] -= amount
+    return user
+
+logs = [
+    ["ADD", "alice", 50],
+    ["ADD", "bob", 20],
+    ["PAY", "alice", 60],
+    ["ADD", "alice", 40],
+    ["PAY", "bob", 10]
+]
+
+print(balance(logs))
+
+def merge(nums):
+    if not nums:
+        return []
+    
+    nums.sort()
+    res = [[nums[0], nums[0]]]
+
+    for num in nums[1:]:
+        if num == res[-1][1] + 1:
+            res[-1][1] = num
+        else:
+            res.append([num, num])
+
+    return res
+
+nums = [5,6,7,10,12,13,14,20]
+print(merge(nums)) # [[5,7],[10,10],[12,14],[20,20]]
+
+
+def longestCommonPrefix(strs):
+    if not strs:
+        return 0
+    
+    prefix_len = 0
+    for chars in zip(*strs):  # transpose: column by column
+        if len(set(chars)) == 1:
+            prefix_len += 1
+        else:
+            break
+    return prefix_len
+def longestCommonPrefix(strs):
+    if not strs:
+        return 0
+
+    # take the first string as the reference
+    first = strs[0]
+    for i in range(len(first)):
+        for s in strs[1:]:
+            if i >= len(s) or s[i] != first[i]:
+                return i  # mismatch found
+    return len(first)  # all characters matched
+
+
+
+
+def maxDigitSum(nums):
+    maxSum = 0
+    for num in nums:
+        digitSum = sum(int(d) for d in str(num))
+        maxSum = max(maxSum, digitSum)
+    return maxSum
+
+print(maxDigitSum([123, 456, 789]))
+
+from typing import List
+
+def count_power3_pairs(nums: List[int]) -> int:
+    # Precompute powers of 3 up to the maximum possible sum
+    powers_of_3 = []
+    p = 1
+    max_sum = 2 * 10**5  # max nums[i] is 10^5
+    while p <= max_sum:
+        powers_of_3.append(p)
+        p *= 3
+
+    seen = {}  # dictionary to store counts of numbers
+    count = 0
+
+    for num in nums:
+        for power in powers_of_3:
+            target = power - num
+            if target in seen:
+                count += seen[target]  # add all previous occurrences of target
+        # update dictionary
+        if num in seen:
+            seen[num] += 1
+        else:
+            seen[num] = 1
+
+    return count

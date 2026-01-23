@@ -388,3 +388,61 @@ DON’T
 **Q3** – Largest island BFS
 **Q4** – Histogram
 
+
+```python
+Q3 – BFS / Island Variant
+
+Grid example:
+
+grid = [
+ [1,1,0,0],
+ [1,0,0,2],
+ [0,0,1,1],
+ [2,0,1,1]
+]
+
+
+1 = land
+
+0 = water
+
+2 = treasure
+
+Return a matrix where each land cell has the distance to nearest treasure.
+
+from collections import deque
+
+def treasure_distance(grid):
+    if not grid or not grid[0]:
+        return []
+
+    rows, cols = len(grid), len(grid[0])
+    dist = [[-1] * cols for _ in range(rows)]  # initialize distances
+    visited = set()
+    q = deque()
+
+    # Step 1: enqueue all treasures
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 2:
+                q.append((r, c, 0))  # (row, col, distance)
+                visited.add((r, c))
+                dist[r][c] = 0  # treasure distance = 0
+
+    # Step 2: BFS
+    directions = [(1,0), (-1,0), (0,1), (0,-1)]
+    while q:
+        r, c, d = q.popleft()
+        for dr, dc in directions:
+            nr, nc = r + dr, c + dc
+            # check boundaries
+            if 0 <= nr < rows and 0 <= nc < cols:
+                # only visit land (1) and not visited
+                if grid[nr][nc] == 1 and (nr, nc) not in visited:
+                    dist[nr][nc] = d + 1
+                    visited.add((nr, nc))
+                    q.append((nr, nc, d + 1))
+
+    return dist
+
+```
